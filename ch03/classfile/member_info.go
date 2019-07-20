@@ -1,8 +1,7 @@
 package classfile
 
-import "github.com/alecthomas/gometalinter/_linters/src/github.com/GoASTScanner/gas/core"
-
 /* java
+
 field_info {
     u2             access_flags;
     u2             name_index;

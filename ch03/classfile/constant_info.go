@@ -24,13 +24,20 @@ cp_info {
 	u1 info[];
 }
 */
+
+/*
+常量池的接口定义,其他具体的常量池都需要实现 readInfo 这个接口
+
+*/
 type ConstantInfo interface {
 	readInfo(reader *ClassReader)
 }
 
 func readConstantInfo(reader *ClassReader, cp ConstantPool) ConstantInfo {
 	tag := reader.readUint8()
-	c := new
+	c := newConstantInfo(tag, cp)
+	c.readInfo(reader)
+	return c
 }
 
 func newConstantInfo(tag uint8, cp ConstantPool) ConstantInfo {
@@ -47,15 +54,25 @@ func newConstantInfo(tag uint8, cp ConstantPool) ConstantInfo {
 	case CONSTANT_Utf8:
 		return &ConstantUtf8Info{}
 	case CONSTANT_String:
-		return &ConstantStringInfo{}
+		return &ConstantStringInfo{cp: cp}
 	case CONSTANT_Class:
-		return &ConstantClassInfo{}
+		return &ConstantClassInfo{cp: cp}
 	case CONSTANT_Fieldref:
-		return &ConstantFieldrefInfo{}
+		return &ConstantFieldrefInfo{ConstantMemberrefInfo{cp: cp}}
 	case CONSTANT_Methodref:
-		return &ConstantMethodrefInfo{}
+		return &ConstantMethodrefInfo{ConstantMemberrefInfo{cp: cp}}
 	case CONSTANT_InterfaceMethodref:
-		return &ConstantInterfaceMethodrefInfo{}
+		return &ConstantInterfaceMethodrefInfo{ConstantMemberrefInfo{cp: cp}}
+	case CONSTANT_NameAndType:
+		return &ConstantNameAndTypeInfo{}
+	case CONSTANT_MethodType:
+		return &ConstantMethodTypeInfo{}
+	case CONSTANT_MethodHandle:
+		return &ConstantMethodHandleInfo{}
+	case CONSTANT_InvokeDynamic:
+		return &ConstantInvokeDynamicInfo{}
+	default:
+		panic("java.lang.ClassFormatError: constant pool tag!")
 	}
 
 }
