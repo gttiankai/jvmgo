@@ -2,7 +2,6 @@ package classfile
 
 type ConstantPool []ConstantInfo
 
-
 func readConstantPool(reader *ClassReader) ConstantPool {
 	cpCount := int(reader.readUint16())
 	cp := make([]ConstantInfo, cpCount)
@@ -15,9 +14,9 @@ func readConstantPool(reader *ClassReader) ConstantPool {
 		}
 	}
 	return cp
- }
+}
 
-func (self ConstantPool) getConstantInfo(index uint16) ConstantInfo  {
+func (self ConstantPool) getConstantInfo(index uint16) ConstantInfo {
 	if cpInfo := self[index]; cpInfo != nil {
 		return cpInfo
 	}
@@ -27,18 +26,17 @@ func (self ConstantPool) getConstantInfo(index uint16) ConstantInfo  {
 func (self ConstantPool) getNameAndType(index uint16) (string, string) {
 	ntInfo := self.getConstantInfo(index).(*ConstantNameAndTypeInfo)
 
-	name := self.getutf8(ntInfo.nameIndex)
-	_type := self.getutf8(ntInfo.descriptorIndex)
+	name := self.getUtf8(ntInfo.nameIndex)
+	_type := self.getUtf8(ntInfo.descriptorIndex)
 	return name, _type
 }
 
 func (self ConstantPool) getClassName(index uint16) string {
 	classInfo := self.getConstantInfo(index).(*ConstantClassInfo)
-	return self.getutf8(classInfo.nameIndex)
+	return self.getUtf8(classInfo.nameIndex)
 }
 
-func (self ConstantPool) getutf8(index uint16) string {
+func (self ConstantPool) getUtf8(index uint16) string {
 	utf8Info := self.getConstantInfo(index).(*ConstantUtf8Info)
 	return utf8Info.str
 }
-

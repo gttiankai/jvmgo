@@ -23,19 +23,18 @@ ClassFile {
 }
 */
 
-
 type ClassFile struct {
-	magic 			uint32
-	minorVersion	uint16
-	majorVersion	uint16
-	constantPool	ConstantPool
-	accessFlags		uint16
-	thisClass		uint16
-	superClass		uint16
-	interfaces		[]uint16
-	fields			[]*MemberInfo
-	methods         []*MemberInfo
-	attributes      []*AttributeInfo
+	magic        uint32
+	minorVersion uint16
+	majorVersion uint16
+	constantPool ConstantPool
+	accessFlags  uint16
+	thisClass    uint16
+	superClass   uint16
+	interfaces   []uint16
+	fields       []*MemberInfo
+	methods      []*MemberInfo
+	attributes   []AttributeInfo
 }
 
 func Parse(classData []byte) (cf *ClassFile, err error) {
@@ -56,7 +55,7 @@ func Parse(classData []byte) (cf *ClassFile, err error) {
 	return
 }
 
-func (self *ClassFile) read(reader *ClassReader)  {
+func (self *ClassFile) read(reader *ClassReader) {
 	self.readAndCheckMagic(reader)
 	self.readAndCheckVersion(reader)
 	self.constantPool = readConstantPool(reader)
@@ -69,16 +68,14 @@ func (self *ClassFile) read(reader *ClassReader)  {
 	self.attributes = readAttributes(reader, self.constantPool)
 }
 
-
-func (self *ClassFile) readAndCheckMagic(reader *ClassReader)  {
+func (self *ClassFile) readAndCheckMagic(reader *ClassReader) {
 	magic := reader.readUint32()
 	if magic != 0xCAFFBABE {
 		panic("java.lang.ClassFormateError: magic!")
 	}
 }
 
-
-func (self *ClassFile) readAndCheckVersion(reader *ClassReader)  {
+func (self *ClassFile) readAndCheckVersion(reader *ClassReader) {
 	self.minorVersion = reader.readUint16()
 	self.majorVersion = reader.readUint16()
 
@@ -127,45 +124,14 @@ func (self *ClassFile) SuperClassName() string {
 	if self.superClass > 0 {
 		return self.constantPool.getClassName(self.superClass)
 	}
- 	return ""
+	return ""
 }
 
 func (self *ClassFile) InterfaceName() []string {
 	interfaceNames := make([]string, len(self.interfaces))
 
-	for i, cpIndex := range  self.interfaces {
+	for i, cpIndex := range self.interfaces {
 		interfaceNames[i] = self.constantPool.getClassName(cpIndex)
 	}
 	return interfaceNames
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
