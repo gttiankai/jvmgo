@@ -70,7 +70,7 @@ func (self *ClassFile) read(reader *ClassReader) {
 
 func (self *ClassFile) readAndCheckMagic(reader *ClassReader) {
 	magic := reader.readUint32()
-	if magic != 0xCAFFBABE {
+	if magic != 0xCAFEBABE {
 		panic("java.lang.ClassFormateError: magic!")
 	}
 }
@@ -127,7 +127,7 @@ func (self *ClassFile) SuperClassName() string {
 	return ""
 }
 
-func (self *ClassFile) InterfaceName() []string {
+func (self *ClassFile) InterfaceNames() []string {
 	interfaceNames := make([]string, len(self.interfaces))
 
 	for i, cpIndex := range self.interfaces {
