@@ -9,7 +9,7 @@ attribute_info {
 */
 
 type AttributeInfo interface {
-	readInfo(read *ClassReader)
+	readInfo(reader *ClassReader)
 }
 
 func readAttributes(reader *ClassReader, cp ConstantPool) []AttributeInfo {
@@ -27,6 +27,10 @@ func readAttribute(reader *ClassReader, cp ConstantPool) AttributeInfo {
 	attrName := cp.getUtf8(attrNameIndex)
 	attrLen := reader.readUint32()
 	attrInfo := newAttributeInfo(attrName, attrLen, cp)
+	/*
+		focus: this is key function
+	*/
+	attrInfo.readInfo(reader)
 	return attrInfo
 }
 

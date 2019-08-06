@@ -18,13 +18,34 @@ CONSTANT_InterfaceMethodref_info {
 }
 */
 
-type ConstantMemberrefInfo struct {
-	cp 					ConstantPool
-	classIndex 			uint16
-	nameAndTypeIndex 	uint16
+/*
+ConstantFiledrefInfo 继承自 ConstanMemberrefInfo
+*/
+type ConstantFieldrefInfo struct {
+	ConstantMemberrefInfo
 }
 
-func (self *ConstantMemberrefInfo) readInfo(reader *ClassReader)  {
+/*
+ConstantMethodrefInfo 继承自 ConstanMemberrefInfo
+*/
+type ConstantMethodrefInfo struct {
+	ConstantMemberrefInfo
+}
+
+/*
+ConstantInterfaceMethodrefInfo 继承自 ConstanMemberrefInfo
+*/
+type ConstantInterfaceMethodrefInfo struct {
+	ConstantMemberrefInfo
+}
+
+type ConstantMemberrefInfo struct {
+	cp               ConstantPool
+	classIndex       uint16
+	nameAndTypeIndex uint16
+}
+
+func (self *ConstantMemberrefInfo) readInfo(reader *ClassReader) {
 	self.classIndex = reader.readUint16()
 	self.nameAndTypeIndex = reader.readUint16()
 }
@@ -36,22 +57,3 @@ func (self *ConstantMemberrefInfo) ClassName() string {
 func (self *ConstantMemberrefInfo) NameAndDescriptor() (string, string) {
 	return self.cp.getNameAndType(self.nameAndTypeIndex)
 }
-/*
-ConstantFiledrefInfo 继承自 ConstanMemberrefInfo
-*/
-type ConstantFieldrefInfo struct {
-	ConstantMemberrefInfo
-}
-/*
-ConstantMethodrefInfo 继承自 ConstanMemberrefInfo
-*/
-type ConstantMethodrefInfo struct {
-	ConstantMemberrefInfo
-}
-/*
-ConstantInterfaceMethodrefInfo 继承自 ConstanMemberrefInfo
-*/
-type ConstantInterfaceMethodrefInfo struct {
-	ConstantMemberrefInfo
-}
-
