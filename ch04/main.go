@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"jvmgo/ch04/rtda"
 )
-import "strings"
 import "jvmgo/ch03/classfile"
 import "jvmgo/ch03/classpath"
 
@@ -21,20 +20,19 @@ func main() {
 }
 
 func startJVM(cmd *Cmd) {
-	cp := classpath.Parse(cmd.XjreOption, cmd.cpOption)
-
-	fmt.Printf("classpath: %s class:%s args:%v\n",
-		cp, cmd.class, cmd.args)
-
-	className := strings.Replace(cmd.class, ".", "/", -1)
-	cf := loadClass(className, cp)
-	fmt.Println(cmd.class)
-	printClassInfo(cf)
+	//cp := classpath.Parse(cmd.XjreOption, cmd.cpOption)
+	//
+	//fmt.Printf("classpath: %s class:%s args:%v\n",
+	//	cp, cmd.class, cmd.args)
+	//
+	//className := strings.Replace(cmd.class, ".", "/", -1)
+	//cf := loadClass(className, cp)
+	//fmt.Println(cmd.class)
+	//printClassInfo(cf)
 
 	frame := rtda.NewFrame(100, 100)
 	TestLocalVars(frame.LocalVars())
 	testOperandStack(frame.OperandStack())
-
 }
 
 func TestLocalVars(vars rtda.LocalVars) {
