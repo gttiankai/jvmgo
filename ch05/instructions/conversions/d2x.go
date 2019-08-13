@@ -31,7 +31,7 @@ type D2L struct {
 	base.NoOperandsInstruction
 }
 
-func (self *D2L) Execute(frame rtda.Frame) {
+func (self *D2L) Execute(frame *rtda.Frame) {
 	stack := frame.OperandStack()
 	d := stack.PopDouble()
 	l := int64(d)

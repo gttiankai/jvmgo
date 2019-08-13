@@ -10,7 +10,7 @@ type NoOperandsInstruction struct {
 	// empty
 }
 
-func (self *NoOperandsInstruction) FetchOperands() {
+func (self *NoOperandsInstruction) FetchOperands(reader *BytecodeReader) {
 	// do nothing
 }
 

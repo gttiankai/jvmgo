@@ -6,7 +6,7 @@ import (
 )
 
 type NOP struct {
-	base.NopInstruction
+	base.NoOperandsInstruction
 }
 
 func (self *NOP) Execute(frame *rtda.Frame) {

@@ -1,5 +1,15 @@
 package rtda
 
+/*
+JVM
+  Thread
+    pc
+    Stack
+      Frame
+        LocalVars
+        OperandStack
+*/
+
 type Thread struct {
 	pc    int
 	stack *Stack
@@ -29,4 +39,8 @@ func (self *Thread) PopFrame() *Frame {
 
 func (self *Thread) CurrentFrame() *Frame {
 	return self.stack.pop()
+}
+
+func (self *Thread) NewFrame(maxLocals, maxStack uint) *Frame {
+	return NewFrame(self, maxLocals, maxStack)
 }

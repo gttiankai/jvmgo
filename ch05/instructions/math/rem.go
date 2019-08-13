@@ -50,3 +50,19 @@ func (self *IREM) Execute(frame *rtda.Frame) {
 	result := v1 % v2
 	stack.PushLong(result)
 }
+
+// Remainder long
+type LREM struct {
+	base.NoOperandsInstruction
+}
+
+func (self *LREM) Execute(frame *rtda.Frame) {
+	stack := frame.OperandStack()
+	v2 := stack.PopLong()
+	v1 := stack.PopLong()
+	if v2 == 0 {
+		panic("java.lang.ArithmeticException: / by zero")
+	}
+	result := v1 % v2
+	stack.PushLong(result)
+}
