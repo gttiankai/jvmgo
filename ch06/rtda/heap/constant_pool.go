@@ -1,6 +1,9 @@
 package heap
 
-import "jvmgo/ch06/classfile"
+import (
+	"fmt"
+	"jvmgo/ch06/classfile"
+)
 
 type Constant interface {
 }
@@ -16,6 +19,56 @@ func newConstantPool(class *Class, cfCp classfile.ConstantPool) *ConstantPool {
 	rtCp := &ConstantPool{class, consts}
 
 	for i := 1; i < cpCount; i++ {
+		cpInfo := cfCp[i]
+		switch cpInfo.(type) {
+		// int
+		case *classfile.ConstantIntegerInfo:
+			intInfo := cpInfo.(*classfile.ConstantIntegerInfo)
+			consts[i] = intInfo.Value()
+		// float
+		case *classfile.ConstantFloatInfo:
+			floatInfo := cpInfo.(*classfile.ConstantFloatInfo)
+			consts[i] = floatInfo.Value()
+		// long
+		case *classfile.ConstantLongInfo:
+			longInfo := cpInfo.(*classfile.ConstantLongInfo)
+			consts[i] = longInfo.Value()
+			i++
+		// double
+		case *classfile.ConstantDoubleInfo:
+			doubleInfo := cpInfo.(*classfile.ConstantDoubleInfo)
+			consts[i] = doubleInfo.Value()
+			i++
+		// string
+		case *classfile.ConstantStringInfo:
+			stringInfo := cpInfo.(*classfile.ConstantStringInfo)
+			consts[i] = stringInfo.String()
+		// class
+		case *classfile.ConstantClassInfo:
+			// todo
+			classInfo := cpInfo.(*classfile.ConstantClassInfo)
+			consts[i] = newClassRef(rtCp, classInfo)
 
+		case *classfile.ConstantFieldrefInfo:
+			// todo
+			classInfo := cpInfo.(*classfile.ConstantFieldrefInfo)
+			consts[i] = newFieldRef(rtCp, classInfo)
+		case *classfile.ConstantMethodrefInfo:
+			methodrefInfo := cpInfo.(*classfile.ConstantMethodrefInfo)
+			consts[i] = newMethodRef(rtCp, methodrefInfo)
+		case *classfile.ConstantInterfaceMethodrefInfo:
+			methodrefInfo := cpInfo.(*classfile.ConstantInterfaceMethodrefInfo)
+			consts[i] = newInterfaceMethodRef(rtCp, methodrefInfo)
+		default:
+			// todo
+		}
 	}
+	return rtCp
+}
+
+func (self *ConstantPool) GetConstant(index uint) Constant {
+	if c := self.consts[index]; c != nil {
+		return c
+	}
+	panic(fmt.Sprint("NO constants at index %d", index))
 }
