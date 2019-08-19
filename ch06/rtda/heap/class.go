@@ -21,6 +21,10 @@ type Class struct {
 	staticVars        *rtda.Slot
 }
 
+func newClass(cf *classfile.ClassFile) *Class {
+	// todo
+}
+
 func (self *Class) getPackageName() string {
 
 }
